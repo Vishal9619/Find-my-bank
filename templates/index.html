@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Find my Bank</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/4.1.3/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+  <style>
+  
+  </style>
+</head>
+<body>
+<div class="fluid-container">
+  <img src="/static/bank-accounts.jpg" z-index="-1"; height="180px" width="100%" style="margin-top:-15px;"> 
+</div> 
+<div class="container">
+  <div class="shadow-lg p-3 mb-3 bg-white text-center">
+  <h2><strong>FIND MY BANK</strong> </h2>
+</div>
+  <h4>Choose the option:</h4>
+  <button type="button" class="btn btn-warning " onclick="ByIFSC()"> Search via IFSC</button> &nbsp &nbsp 
+  <button type="button" class="btn btn-warning" onclick="ByNameCity()">Search by Name and City</button>
+  <div id="By_Ifsc" class="pt-4">
+  <form class="form-inline top-buffer" action="/bankbyIFSC" method="POST">
+    <div class="form-group">
+      <label >Enter the IFSC Code:</label>
+     <input type="text" class="form-control" id="ifsc" placeholder="Ifsc" name="text">  
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>  
+  </form>
+<div class="container pt-4">
+{% if status%}
+<table border=1>
+  <tr>
+    <th>Bank Name</th>
+    <th>Address</th>
+    <th>Branch</th>
+    <th>Branch ID</th>
+    <th>Branch Address</th>
+    <th>District</th>
+    <th>State</th>
+  </tr>
+  <tr>
+    <td>{{ bank_name }} </td>
+    <td>{{ ifsc_code }} </td>
+    <td>{{ branch }} </td>
+    <td>{{ branchId }} </td>
+    <td>{{ branch_address }} </td>
+    <td>{{ district }} </td>
+    <td>{{ state }} </td>
+  </tr>
+</table>
+{%elif status == 0 %}
+  <div class="alert alert-danger">
+    <strong>Bank not found!</strong> Check for the credentials.
+  </div>
+{% endif%}
+{% if error %}
+<h4>{{error}} </h4>
+{% endif%}
+</div>  <!-- OnClick event -->
+</div>  <!-- Form output container  -->
+
+<div id="By_Name_City" style="display:none" class="pt-4">
+  <form class="form" action="/bankbyNameCity" method="POST">
+    <div class="form-group">
+      <label >Enter the name of Bank:</label>
+     <input type="text" class="form-control" id="bank_name" placeholder="Bank name" name="bname">
+
+    </div>
+    <div class="form-group ">
+      <label >Enter the city of Bank:</label>
+     <input type="text" class="form-control" id="bank_city" placeholder="city" name="bcity">
+     
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>  
+  </form>
+<div class="container pt-3">
+  {% if bank_details|length > 0 %}
+  <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">IFSC</th>
+      <th scope="col">Bank Name</th>
+      <th scope="col">BRANCH</th>
+      <th scope="col">Branch ID</th>
+      <th scope="col">Branch Address</th>
+      <th scope="col">City</th>
+      <th scope="col">District</th>
+      <th scope="col">State</th>
+    </tr>
+    </thead>
+    <tbody>
+      {%for row in bank_details%}
+      <tr>
+        <th scope="row">{%  print row["ifsc_code"]%}</th>
+        <td>{{ row["bank_name"] }}</td>
+        <td>{{ row["branch"] }}</td>
+        <td>{{ row["branchId"] }}</td>
+        <td>{{ row["branch_address"] }}</td>
+        <td>{{ row["city"] }}</td>
+        <td>{{ row["district"] }}</td>
+        <td>{{ row["state"] }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {%elif dsize == 0 %}
+  <div class="alert alert-danger">
+    <strong>Bank not found!</strong> Check for the credentials.
+  </div>
+{% endif%}
+{% if error %}
+<h4>{{error}} </h4>
+{% endif%}    
+</div>  <!-- OnClick event -->
+</div>  <!-- Form output container  -->
+
+</div>  <!-- Main outer Div  -->
+<script>
+  function ByIFSC()
+  {
+    var id=document.getElementById("By_Ifsc");
+    if(id.style.display==="none")
+    { // if(document.getElementById("By_Name_City").style.display=="block") 
+        document.getElementById("By_Name_City").style.display="none";
+      id.style.display="block";
+    }
+    else
+    {
+       id.style.display="none";
+    }
+  }
+  function ByNameCity()
+  {  var id=document.getElementById("By_Name_City");
+    if(id.style.display==="none")
+    { //if(document.getElementById("By_Ifsc").style.display=="block")
+        document.getElementById("By_Ifsc").style.display="none";
+      id.style.display="block";
+    }
+    else
+    {
+       id.style.display="none";
+    }
+
+  }
+</script>
+</body>
+</html>
