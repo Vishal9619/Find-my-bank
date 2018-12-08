@@ -9,7 +9,7 @@ Language:
 	Backend- Python 3
 	Frontend- HTML, JS
 Framework: Flask
-Deployed on Heroku
+Deployed on Heroku ( https://find-my-bank.herokuapp.com )
 
 
 The application can be made to run by following below commands:
