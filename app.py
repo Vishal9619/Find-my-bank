@@ -2,9 +2,6 @@ from flask import Flask, request, jsonify, make_response, render_template
 import csv,sys
 import json
 
-csv_file=csv.reader(open('indian_banks-master/bank_branches.csv',"rt",encoding='utf8'))
-
-
 app=Flask(__name__)
 
 @app.route('/',methods=['GET'])
@@ -13,6 +10,7 @@ def index():
 
 @app.route('/bankbyIFSC',methods=["POST"])
 def bankdetailsbyIFSC():
+	csv_file=csv.reader(open('indian_banks-master/bank_branches.csv',"rt",encoding='utf8'))
 	if request.method=="POST":
 		ifs=request.form['text']
 		error=None
@@ -25,6 +23,7 @@ def bankdetailsbyIFSC():
 		state=""
 		bank_name=""
 
+		print(ifs)
 		if ifs:
 			try:
 				ifs=ifs.upper()
@@ -49,6 +48,7 @@ def bankdetailsbyIFSC():
 
 @app.route('/bankbyNameCity',methods=["POST"])
 def bankbyNameCity():
+	csv_file=csv.reader(open('indian_banks-master/bank_branches.csv',"rt",encoding='utf8'))
 	if request.method=="POST":
 		bank_name=request.form['bname']
 		bank_city=request.form['bcity']
